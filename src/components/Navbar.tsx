@@ -24,17 +24,17 @@ const Navbar: React.FC = () => {
 
     return (
         <nav className={`navbar navbar-expand-lg fixed-top transition-all ${scrolled || isMenuOpen ? 'glass-nav py-2 shadow-sm' : 'bg-transparent py-4'}`}>
-            <div className="container">
-                <a href="#" className="navbar-brand d-flex align-items-center">
-                    <span className="brand-text mt-1" style={{ fontSize: '1.5rem' }}>Lichtenberg</span>
+            <div className="container d-flex flex-nowrap justify-content-between align-items-center">
+                <a href="#" className="navbar-brand d-flex align-items-center me-0 overflow-hidden" style={{ maxWidth: '65%' }}>
+                    <span className="brand-text mt-1 text-truncate" style={{ fontSize: 'clamp(0.9rem, 4.5vw, 1.2rem)', letterSpacing: '0.1em' }}>Lichtenberg</span>
                 </a>
 
-                <div className="d-flex align-items-center gap-2 d-lg-none">
-                    <button onClick={toggleTheme} className="btn btn-link text-reset px-2 py-1 theme-toggle text-decoration-none hover-opacity">
+                <div className="d-flex align-items-center gap-1 d-lg-none flex-shrink-0">
+                    <button onClick={toggleTheme} className="btn btn-link text-reset px-1 py-1 theme-toggle text-decoration-none hover-opacity">
                         {theme === 'dark' ? <i className="bi bi-moon-stars-fill fs-5"></i> : <i className="bi bi-sun-fill fs-5"></i>}
                     </button>
                     <button
-                        className="navbar-toggler border-0 p-2 shadow-none"
+                        className="navbar-toggler border-0 p-1 shadow-none"
                         type="button"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         aria-expanded={isMenuOpen}
