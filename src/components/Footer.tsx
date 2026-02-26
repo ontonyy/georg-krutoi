@@ -1,3 +1,5 @@
+import logo from '../assets/logo.png';
+
 const Footer: React.FC = () => {
     return (
         <footer id="footer" className="footer-bg py-5 border-top border-secondary border-opacity-25 text-white">
@@ -38,8 +40,9 @@ const Footer: React.FC = () => {
 
                 <div className="d-none d-md-block" style={{ width: '200px' }}></div>
             </div>
-            <div className="text-center mt-5 text-secondary small">
-                &copy; {new Date().getFullYear()} Georg Lichtenberg. All rights reserved.
+            <div className="text-center mt-5 text-secondary small d-flex align-items-center justify-content-center gap-2">
+                <img src={logo} alt="Lichtenberg" style={{ height: '24px', width: 'auto', opacity: 0.6 }} />
+                <span>&copy; {new Date().getFullYear()} Georg Lichtenberg. All rights reserved.</span>
             </div>
         </footer>
     );

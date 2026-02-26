@@ -120,7 +120,7 @@ const Lore: React.FC<LoreProps> = ({ onOpenSecret }) => {
                                 <h3 className="h4 fw-bold text-body m-0">
                                     <i className="bi bi-map me-2"></i>The Arsenal (Quest Log)
                                 </h3>
-                                <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary rounded-pill px-4 shadow-sm hover-scale d-flex align-items-center gap-2">
+                                <a href={`${import.meta.env.BASE_URL}resume.pdf`} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary rounded-pill px-4 shadow-sm hover-scale d-flex align-items-center gap-2">
                                     <i className="bi bi-file-earmark-arrow-down-fill"></i> Download Profile
                                 </a>
                             </div>

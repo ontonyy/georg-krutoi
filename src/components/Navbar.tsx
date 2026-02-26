@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import logo from '../assets/logo.png';
 
 const Navbar: React.FC = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -23,7 +24,9 @@ const Navbar: React.FC = () => {
     return (
         <nav className={`navbar navbar-expand-lg fixed-top transition-all ${scrolled ? 'glass-nav py-2' : 'bg-transparent py-4'}`}>
             <div className="container d-flex justify-content-between align-items-center">
-                <a href="#" className="navbar-brand fs-3 fw-bold text-decoration-none text-reset">Lichtenberg</a>
+                <a href="#" className="navbar-brand d-flex align-items-center gap-2">
+                    <img src={logo} alt="Lichtenberg" style={{ height: '45px', width: 'auto' }} />
+                </a>
                 <div className="d-none d-md-flex gap-4 align-items-center">
                     <a href="#home" className="nav-link text-reset hover-opacity">Home</a>
                     <a href="#lore" className="nav-link text-reset hover-opacity">Lore</a>

@@ -1,4 +1,15 @@
 import { useState, useMemo } from 'react';
+import skrepka from '../assets/skrepka.png';
+import fingerprint from '../assets/fingerprint.png';
+
+const BASE_URL = import.meta.env.BASE_URL || '/';
+
+const getAssetPath = (path: string) => {
+    if (path.startsWith('http')) return path;
+    // Remove leading slash and combine with base
+    const cleanPath = path.startsWith('/') ? path.slice(1) : path;
+    return BASE_URL + cleanPath;
+};
 
 type PortfolioItem = {
     id: number;
@@ -197,8 +208,8 @@ const Portfolio: React.FC = () => {
                                 {item.type === 'video' ? (
                                     <>
                                         <video
-                                            src={item.src}
-                                            poster={item.poster}
+                                            src={getAssetPath(item.src)}
+                                            poster={item.poster ? getAssetPath(item.poster) : undefined}
                                             className="img-fluid w-100 h-100 object-fit-cover portfolio-img"
                                             muted loop playsInline
                                             onMouseOver={(e) => e.currentTarget.play()}
@@ -210,7 +221,7 @@ const Portfolio: React.FC = () => {
                                     </>
                                 ) : (
                                     <img
-                                        src={item.src}
+                                        src={getAssetPath(item.src)}
                                         alt={`Portfolio item ${item.id}`}
                                         className="img-fluid w-100 h-100 object-fit-cover portfolio-img"
                                     />
@@ -257,7 +268,7 @@ const Portfolio: React.FC = () => {
                                 onClick={() => setSelectedItem(null)}
                                 className="btn btn-link p-0 hover-scale"
                             >
-                                <img src="/images/skrepka.png" alt="Close" className="close-icon rounded-3" style={{ height: '40px', width: 'auto' }} />
+                                <img src={skrepka} alt="Close" className="close-icon rounded-3" style={{ height: '40px', width: 'auto' }} />
                             </button>
                         </div>
 
@@ -274,7 +285,7 @@ const Portfolio: React.FC = () => {
                             <div className="flex-grow-1 text-center bg-black rounded-3 overflow-hidden d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
                                 {selectedItem.type === 'video' ? (
                                     <video
-                                        src={selectedItem.src}
+                                        src={getAssetPath(selectedItem.src)}
                                         controls
                                         autoPlay
                                         className="img-fluid max-h-75vh w-100"
@@ -283,7 +294,7 @@ const Portfolio: React.FC = () => {
                                     />
                                 ) : (
                                     <img
-                                        src={selectedItem.src}
+                                        src={getAssetPath(selectedItem.src)}
                                         alt="Expanded view"
                                         className="img-fluid max-h-75vh object-contain"
                                         style={{ maxHeight: '70vh' }}
@@ -313,11 +324,11 @@ const Portfolio: React.FC = () => {
                                     >
                                         {item.type === 'video' ? (
                                             <div className="w-100 h-100 bg-dark position-relative d-flex align-items-center justify-content-center">
-                                                {item.poster ? <img src={item.poster} className="w-100 h-100 object-fit-cover position-absolute top-0 start-0 opacity-50" alt="thumbnail" /> : null}
+                                                {item.poster ? <img src={getAssetPath(item.poster)} className="w-100 h-100 object-fit-cover position-absolute top-0 start-0 opacity-50" alt="thumbnail" /> : null}
                                                 <i className="bi bi-play-fill text-white position-relative z-1"></i>
                                             </div>
                                         ) : (
-                                            <img src={item.src} className="w-100 h-100 object-fit-cover" alt="thumbnail" />
+                                            <img src={getAssetPath(item.src)} className="w-100 h-100 object-fit-cover" alt="thumbnail" />
                                         )}
                                     </div>
                                 ))}
@@ -329,7 +340,7 @@ const Portfolio: React.FC = () => {
                                 className="btn btn-link p-0 border-0 hover-scale hover-opacity"
                                 onClick={() => setSelectedItem(null)}
                             >
-                                <img src="/images/fingerprint.png" alt="Close" className="rounded-3 shadow-sm" style={{ height: '60px', width: 'auto' }} />
+                                <img src={fingerprint} alt="Close" className="rounded-3 shadow-sm" style={{ height: '60px', width: 'auto' }} />
                             </button>
                         </div>
                     </div>
