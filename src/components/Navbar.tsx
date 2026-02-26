@@ -25,8 +25,8 @@ const Navbar: React.FC = () => {
     return (
         <nav className={`navbar navbar-expand-lg fixed-top transition-all ${scrolled || isMenuOpen ? 'glass-nav py-2 shadow-sm' : 'bg-transparent py-4'}`}>
             <div className="container d-flex flex-nowrap justify-content-between align-items-center">
-                <a href="#" className="navbar-brand d-flex align-items-center me-0 overflow-hidden" style={{ maxWidth: '65%' }}>
-                    <span className="brand-text mt-1 text-truncate" style={{ fontSize: 'clamp(0.9rem, 4.5vw, 1.2rem)', letterSpacing: '0.1em' }}>Lichtenberg</span>
+                <a href="#" className="navbar-brand d-flex align-items-center me-0 flex-grow-1">
+                    <span className="brand-text mt-1" style={{ fontSize: 'clamp(0.75rem, 4.2vw, 1.3rem)', letterSpacing: '0.05em' }}>Lichtenberg</span>
                 </a>
 
                 <div className="d-flex align-items-center gap-1 d-lg-none flex-shrink-0">
