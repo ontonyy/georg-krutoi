@@ -6,7 +6,6 @@ const BASE_URL = import.meta.env.BASE_URL || '/';
 
 const getAssetPath = (path: string) => {
     if (path.startsWith('http')) return path;
-    // Remove leading slash and combine with base
     const cleanPath = path.startsWith('/') ? path.slice(1) : path;
     return BASE_URL + cleanPath;
 };
@@ -15,7 +14,7 @@ type PortfolioItem = {
     id: number;
     type: 'image' | 'video';
     src: string;
-    poster?: string; // Optional poster for video
+    poster?: string;
 };
 
 type Project = {
@@ -25,7 +24,6 @@ type Project = {
     items: PortfolioItem[];
 };
 
-// Define multiple projects. Project 1 uses the existing images. Project 2 adds theoretical video support.
 const projects: Project[] = [
     {
         id: 1,
@@ -45,7 +43,7 @@ const projects: Project[] = [
         description: "Advanced synthetic materials and motion studies.",
         items: [
             { id: 6, type: 'image', src: '/images/3.png' },
-            { id: 7, type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4', poster: '/images/2.png' }, // Example video
+            { id: 7, type: 'video', src: 'https://www.w3schools.com/html/mov_bbb.mp4', poster: '/images/2.png' },
             { id: 8, type: 'image', src: '/images/1.png' },
         ]
     },
@@ -91,38 +89,23 @@ const Portfolio: React.FC = () => {
     const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
     const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
 
-    // Flatten and optionally shuffle all items once
-    const allItems = useMemo(() => {
-        return projects.flatMap(p => p.items);
-    }, []);
-
-    const chaosItems = useMemo(() => {
-        return [...allItems].sort(() => Math.random() - 0.5);
-    }, [allItems]);
-
+    const allItems = useMemo(() => projects.flatMap(p => p.items), []);
+    const chaosItems = useMemo(() => [...allItems].sort(() => Math.random() - 0.5), [allItems]);
     const activeItems = viewMode === 'project' ? projects[currentProjectIndex].items : chaosItems;
     const currentProject = projects[currentProjectIndex];
 
     const handleSurpriseMe = () => {
         const randomIndex = Math.floor(Math.random() * allItems.length);
         const item = allItems[randomIndex];
-        // If we are in project mode, try to focus that project
         if (viewMode === 'project') {
             const parentProjectIndex = projects.findIndex(p => p.items.some(i => i.id === item.id));
-            if (parentProjectIndex !== -1) {
-                setCurrentProjectIndex(parentProjectIndex);
-            }
+            if (parentProjectIndex !== -1) setCurrentProjectIndex(parentProjectIndex);
         }
         setSelectedItem(item);
     };
 
-    const handleNextProject = () => {
-        setCurrentProjectIndex((prev) => (prev === projects.length - 1 ? 0 : prev + 1));
-    };
-
-    const handlePrevProject = () => {
-        setCurrentProjectIndex((prev) => (prev === 0 ? projects.length - 1 : prev - 1));
-    };
+    const handleNextProject = () => setCurrentProjectIndex((prev) => (prev === projects.length - 1 ? 0 : prev + 1));
+    const handlePrevProject = () => setCurrentProjectIndex((prev) => (prev === 0 ? projects.length - 1 : prev - 1));
 
     const handleNextItem = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -140,18 +123,14 @@ const Portfolio: React.FC = () => {
         setSelectedItem(activeItems[prevIndex]);
     };
 
-    // Helper to find the parent project of an item for the title
-    const getProjectForItem = (item: PortfolioItem) => {
-        return projects.find(p => p.items.some(i => i.id === item.id));
-    };
+    const getProjectForItem = (item: PortfolioItem) => projects.find(p => p.items.some(i => i.id === item.id));
 
     return (
         <section id="portfolio" className="py-5 section-padding position-relative">
-            <div className="container py-5">
-                <h2 className="display-4 text-center mb-2 text-uppercase tracking-widest fw-bold text-body">Portfolio</h2>
+            <div className="container py-lg-5">
+                <h2 className="display-4 text-center mb-2 text-uppercase tracking-widest fw-bold text-body" style={{ fontSize: 'calc(1.5rem + 1.5vw)' }}>Portfolio</h2>
 
-                {/* View Mode Toggle & Surprise Me */}
-                <div className="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3 mb-5 mt-4">
+                <div className="d-flex flex-column flex-sm-row justify-content-center align-items-center gap-3 mb-4 mb-lg-5 mt-4">
                     <div className="btn-group shadow-sm" role="group">
                         <input type="radio" className="btn-check" name="btnradio" id="btnradio1" autoComplete="off" checked={viewMode === 'project'} onChange={() => setViewMode('project')} />
                         <label className="btn btn-outline-secondary dark-btn-outline" htmlFor="btnradio1">Projects</label>
@@ -165,45 +144,40 @@ const Portfolio: React.FC = () => {
                     </button>
                 </div>
 
-                {/* Optional Project Info in Project Mode */}
                 {viewMode === 'project' && (
-                    <p className="text-center text-body opacity-75 mb-5 fs-5 animate-fade-in-up">{currentProject.title}</p>
-                )}
-
-                {/* Slider Controls (Only visible in project mode) */}
-                {viewMode === 'project' && (
-                    <div className="d-flex justify-content-between align-items-center mb-4 position-relative animate-fade-in-up">
+                    <div className="d-flex justify-content-between align-items-center mb-4 position-relative animate-fade-in-up px-md-5">
                         <button
-                            className="btn btn-outline-secondary dark-btn-outline rounded-circle shadow-sm hover-scale d-flex align-items-center justify-content-center"
-                            style={{ width: '50px', height: '50px' }}
+                            className="btn btn-outline-secondary dark-btn-outline rounded-circle shadow-sm hover-scale d-flex align-items-center justify-content-center flex-shrink-0"
+                            style={{ width: '45px', height: '45px' }}
                             onClick={handlePrevProject}
                             aria-label="Previous Project"
                         >
-                            <i className="bi bi-chevron-left fs-4"></i>
+                            <i className="bi bi-chevron-left fs-5"></i>
                         </button>
 
-                        <div className="text-center flex-grow-1 px-3 d-none d-md-block">
-                            {currentProject.description && <p className="mb-0 fst-italic text-body opacity-75">{currentProject.description}</p>}
+                        <div className="text-center flex-grow-1 px-3">
+                            <h3 className="h5 fw-bold text-body mb-1">{currentProject.title}</h3>
+                            {currentProject.description && <p className="mb-0 fst-italic text-body opacity-75 small d-none d-md-block">{currentProject.description}</p>}
                         </div>
 
                         <button
-                            className="btn btn-outline-secondary dark-btn-outline rounded-circle shadow-sm hover-scale d-flex align-items-center justify-content-center"
-                            style={{ width: '50px', height: '50px' }}
+                            className="btn btn-outline-secondary dark-btn-outline rounded-circle shadow-sm hover-scale d-flex align-items-center justify-content-center flex-shrink-0"
+                            style={{ width: '45px', height: '45px' }}
                             onClick={handleNextProject}
                             aria-label="Next Project"
                         >
-                            <i className="bi bi-chevron-right fs-4"></i>
+                            <i className="bi bi-chevron-right fs-5"></i>
                         </button>
                     </div>
                 )}
 
-                {/* Project Items Grid */}
-                <div className="row justify-content-center g-4 animate-fade-in-up" key={viewMode === 'project' ? currentProject.id : 'chaos'}>
+                <div className="row justify-content-center g-3 g-md-4 animate-fade-in-up" key={viewMode === 'project' ? currentProject.id : 'chaos'}>
                     {activeItems.map((item) => (
-                        <div key={item.id} className="col-12 col-md-4">
+                        <div key={item.id} className="col-12 col-sm-6 col-md-4">
                             <div
                                 className="portfolio-item glass rounded-4 overflow-hidden shadow-sm hover-scale cursor-pointer position-relative h-100"
                                 onClick={() => setSelectedItem(item)}
+                                style={{ minHeight: '200px' }}
                             >
                                 {item.type === 'video' ? (
                                     <>
@@ -231,7 +205,6 @@ const Portfolio: React.FC = () => {
                     ))}
                 </div>
 
-                {/* Project Indicators (Only in project mode) */}
                 {viewMode === 'project' && (
                     <div className="d-flex justify-content-center mt-5 gap-2 animate-fade-in-up">
                         {projects.map((_, idx) => (
@@ -239,7 +212,7 @@ const Portfolio: React.FC = () => {
                                 key={idx}
                                 onClick={() => setCurrentProjectIndex(idx)}
                                 className={`rounded-circle border-0 ${idx === currentProjectIndex ? 'bg-secondary' : 'bg-secondary bg-opacity-25'}`}
-                                style={{ width: '12px', height: '12px', transition: 'all 0.3s' }}
+                                style={{ width: '10px', height: '10px', transition: 'all 0.3s' }}
                                 aria-label={`Go to project ${idx + 1}`}
                             />
                         ))}
@@ -247,16 +220,15 @@ const Portfolio: React.FC = () => {
                 )}
             </div>
 
-            {/* Lightbox / Modal */}
             {selectedItem && (
                 <div
                     className="modal-backdrop-custom position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
                     onClick={() => setSelectedItem(null)}
-                    style={{ zIndex: 1050 }}
+                    style={{ zIndex: 1100 }}
                 >
-                    <div className="modal-content-custom glass rounded-4 p-4 p-md-5 animate-fade-in-up position-relative d-flex flex-column align-items-center" onClick={e => e.stopPropagation()}>
-                        <div className="d-flex justify-content-between align-items-center mb-4 w-100">
-                            <h3 className="h4 fw-bold m-0 px-3 py-1 rounded bg-body text-body">
+                    <div className="modal-content-custom glass rounded-4 p-3 p-md-5 animate-fade-in-up position-relative d-flex flex-column align-items-center" onClick={e => e.stopPropagation()}>
+                        <div className="d-flex justify-content-between align-items-center mb-3 mb-md-4 w-100">
+                            <h3 className="h6 fw-bold m-0 px-3 py-2 rounded bg-body text-body text-truncate" style={{ maxWidth: '70%' }}>
                                 {(() => {
                                     const proj = getProjectForItem(selectedItem);
                                     if (!proj) return "Item";
@@ -264,85 +236,61 @@ const Portfolio: React.FC = () => {
                                     return `${proj.title} — Item ${index}`;
                                 })()}
                             </h3>
-                            <button
-                                onClick={() => setSelectedItem(null)}
-                                className="btn btn-link p-0 hover-scale"
-                            >
-                                <img src={skrepka} alt="Close" className="close-icon rounded-3" style={{ height: '40px', width: 'auto' }} />
+                            <button onClick={() => setSelectedItem(null)} className="btn btn-link p-0 hover-scale">
+                                <img src={skrepka} alt="Close" className="close-icon rounded-3" style={{ height: '35px', width: 'auto' }} />
                             </button>
                         </div>
 
-                        <div className="d-flex align-items-center justify-content-between w-100 mb-4 gap-3">
+                        <div className="d-flex align-items-center justify-content-between w-100 mb-3 mb-md-4 gap-2 gap-md-3">
                             <button
                                 className="btn btn-outline-light rounded-circle shadow-sm hover-scale d-flex align-items-center justify-content-center flex-shrink-0"
-                                style={{ width: '40px', height: '40px' }}
+                                style={{ width: '36px', height: '36px' }}
                                 onClick={handlePrevItem}
-                                aria-label="Previous Item"
                             >
                                 <i className="bi bi-chevron-left"></i>
                             </button>
 
-                            <div className="flex-grow-1 text-center bg-black rounded-3 overflow-hidden d-flex justify-content-center align-items-center" style={{ minHeight: '300px' }}>
+                            <div className="flex-grow-1 text-center bg-black rounded-3 overflow-hidden d-flex justify-content-center align-items-center" style={{ minHeight: '200px', maxHeight: '60vh' }}>
                                 {selectedItem.type === 'video' ? (
-                                    <video
-                                        src={getAssetPath(selectedItem.src)}
-                                        controls
-                                        autoPlay
-                                        className="img-fluid max-h-75vh w-100"
-                                        style={{ maxHeight: '70vh' }}
-                                        key={selectedItem.id}
-                                    />
+                                    <video src={getAssetPath(selectedItem.src)} controls autoPlay className="img-fluid w-100" style={{ maxHeight: '60vh' }} key={selectedItem.id} />
                                 ) : (
-                                    <img
-                                        src={getAssetPath(selectedItem.src)}
-                                        alt="Expanded view"
-                                        className="img-fluid max-h-75vh object-contain"
-                                        style={{ maxHeight: '70vh' }}
-                                    />
+                                    <img src={getAssetPath(selectedItem.src)} alt="Expanded" className="img-fluid object-contain" style={{ maxHeight: '60vh' }} />
                                 )}
                             </div>
 
                             <button
                                 className="btn btn-outline-light rounded-circle shadow-sm hover-scale d-flex align-items-center justify-content-center flex-shrink-0"
-                                style={{ width: '40px', height: '40px' }}
+                                style={{ width: '36px', height: '36px' }}
                                 onClick={handleNextItem}
-                                aria-label="Next Item"
                             >
                                 <i className="bi bi-chevron-right"></i>
                             </button>
                         </div>
 
-                        {/* Thumbnail Filmstrip */}
-                        <div className="w-100 overflow-auto mb-4 custom-scrollbar" style={{ whiteSpace: 'nowrap', paddingBottom: '10px' }}>
-                            <div className="d-flex gap-2 justify-content-center" style={{ minWidth: 'min-content', margin: '0 auto' }}>
+                        <div className="w-100 overflow-auto mb-3 mb-md-4 custom-scrollbar">
+                            <div className="d-flex gap-2 justify-content-center px-2 py-1" style={{ minWidth: 'min-content' }}>
                                 {activeItems.map(item => (
                                     <div
                                         key={item.id}
-                                        className={`flex-shrink-0 cursor-pointer rounded overflow-hidden border ${selectedItem.id === item.id ? 'border-primary border-2 opacity-100' : 'border-secondary border-opacity-50 opacity-50 hover-opacity'}`}
-                                        style={{ width: '80px', height: '60px' }}
+                                        className={`flex-shrink-0 cursor-pointer rounded overflow-hidden border ${selectedItem.id === item.id ? 'border-primary border-2 opacity-100' : 'border-secondary border-opacity-50 opacity-50'}`}
+                                        style={{ width: '60px', height: '45px' }}
                                         onClick={(e) => { e.stopPropagation(); setSelectedItem(item); }}
                                     >
                                         {item.type === 'video' ? (
-                                            <div className="w-100 h-100 bg-dark position-relative d-flex align-items-center justify-content-center">
-                                                {item.poster ? <img src={getAssetPath(item.poster)} className="w-100 h-100 object-fit-cover position-absolute top-0 start-0 opacity-50" alt="thumbnail" /> : null}
-                                                <i className="bi bi-play-fill text-white position-relative z-1"></i>
+                                            <div className="w-100 h-100 bg-dark d-flex align-items-center justify-content-center">
+                                                <i className="bi bi-play-fill text-white small"></i>
                                             </div>
                                         ) : (
-                                            <img src={getAssetPath(item.src)} className="w-100 h-100 object-fit-cover" alt="thumbnail" />
+                                            <img src={getAssetPath(item.src)} className="w-100 h-100 object-fit-cover" alt="thumb" />
                                         )}
                                     </div>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="text-center w-100 mt-2">
-                            <button
-                                className="btn btn-link p-0 border-0 hover-scale hover-opacity"
-                                onClick={() => setSelectedItem(null)}
-                            >
-                                <img src={fingerprint} alt="Close" className="rounded-3 shadow-sm" style={{ height: '60px', width: 'auto' }} />
-                            </button>
-                        </div>
+                        <button className="btn btn-link p-0 hover-opacity" onClick={() => setSelectedItem(null)}>
+                            <img src={fingerprint} alt="Close" className="rounded-3" style={{ height: '50px', width: 'auto' }} />
+                        </button>
                     </div>
                 </div>
             )}

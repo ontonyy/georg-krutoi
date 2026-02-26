@@ -24,13 +24,11 @@ const Notes: React.FC = () => {
     const [selectedCategory, setSelectedCategory] = useState<NoteCategory>('Other');
     const [error, setError] = useState<string | null>(null);
 
-    // Helper to get admin details for existing notes or new ones
     const getAdminMarker = (author: string) => {
         const admin = Object.values(ADMIN_DETAILS).find(a => a.name === author);
         return admin ? admin.marker : '👤';
     };
 
-    // Load notes from JSON and localStorage
     useEffect(() => {
         const savedNotes = localStorage.getItem('georg-notes');
         if (savedNotes) {
@@ -40,7 +38,6 @@ const Notes: React.FC = () => {
         }
     }, []);
 
-    // Save notes to localStorage
     useEffect(() => {
         if (notes.length > 0) {
             localStorage.setItem('georg-notes', JSON.stringify(notes));
@@ -57,7 +54,6 @@ const Notes: React.FC = () => {
         let author = '';
         let content = '';
 
-        // Check for admin prefixes
         for (const [prefix, details] of Object.entries(ADMIN_DETAILS)) {
             if (trimmed.toLowerCase().startsWith(prefix.toLowerCase())) {
                 author = details.name;
@@ -91,8 +87,7 @@ const Notes: React.FC = () => {
 
     const handleDeleteNote = (id: string, author: string) => {
         const admin = Object.values(ADMIN_DETAILS).find(a => a.name === author);
-        const requiredSecret = admin ? admin.deleteSecret : 'godmode'; // Fallback for unknown authors
-
+        const requiredSecret = admin ? admin.deleteSecret : 'godmode';
         const secret = window.prompt(`TERMINAL OVERRIDE [Author: ${author}]: Enter deletion authorization code:`);
 
         if (secret === requiredSecret) {
@@ -107,18 +102,17 @@ const Notes: React.FC = () => {
 
     return (
         <section id="notes" className="py-5 section-padding position-relative">
-            <div className="container py-5">
-                <h2 className="display-4 text-center mb-5 text-uppercase tracking-widest fw-bold text-body animate-fade-in-up">Console Logs</h2>
+            <div className="container py-lg-5">
+                <h2 className="display-4 text-center mb-5 text-uppercase tracking-widest fw-bold text-body" style={{ fontSize: 'calc(1.5rem + 1.5vw)' }}>Console Logs</h2>
 
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
-                        {/* Input Area (Disguised) */}
-                        <div className="glass rounded-4 p-4 p-md-5 mb-5 shadow-sm animate-fade-in-up">
+                        <div className="glass rounded-4 p-4 p-md-5 mb-4 mb-lg-5 shadow-sm">
                             <h3 className="h5 fw-bold mb-4 text-body border-bottom border-secondary border-opacity-25 pb-3 opacity-75 text-uppercase tracking-wider">
                                 <i className="bi bi-terminal-fill me-2"></i>System Registry
                             </h3>
 
-                            <div className="input-group mb-2">
+                            <div className="input-group mb-3">
                                 <input
                                     type="text"
                                     className={`form-control bg-transparent ${error ? 'border-danger' : 'border-secondary border-opacity-25'} text-body py-2`}
@@ -127,11 +121,7 @@ const Notes: React.FC = () => {
                                     onChange={handleInputChange}
                                     onKeyDown={(e) => { if (e.key === 'Enter') handleAddNote(); }}
                                 />
-                                <button
-                                    className="btn btn-outline-secondary px-4 border-opacity-25 text-body opacity-75 hover-opacity-100"
-                                    type="button"
-                                    onClick={handleAddNote}
-                                >
+                                <button className="btn btn-outline-secondary px-3 px-sm-4 text-body opacity-75" type="button" onClick={handleAddNote}>
                                     Push
                                 </button>
                             </div>
@@ -142,21 +132,23 @@ const Notes: React.FC = () => {
                                 </div>
                             )}
 
-                            <div className="d-flex align-items-center gap-3">
-                                <label className="text-body opacity-50 small text-uppercase tracking-wider">Partition:</label>
-                                <select
-                                    className="form-select form-select-sm bg-transparent border-secondary border-opacity-25 text-body w-auto"
-                                    value={selectedCategory}
-                                    onChange={(e) => setSelectedCategory(e.target.value as NoteCategory)}
-                                >
+                            <div className="d-flex align-items-center gap-2 gap-sm-3 overflow-auto pb-1">
+                                <label className="text-body opacity-50 small text-uppercase tracking-wider flex-shrink-0">Partition:</label>
+                                <div className="d-flex gap-2">
                                     {categories.map(cat => (
-                                        <option key={cat} value={cat} className="bg-dark text-white">{cat}</option>
+                                        <button
+                                            key={cat}
+                                            onClick={() => setSelectedCategory(cat)}
+                                            className={`btn btn-sm rounded-pill px-3 transition-all ${selectedCategory === cat ? 'btn-primary' : 'btn-outline-secondary border-opacity-25 text-body opacity-75'}`}
+                                            style={{ fontSize: '10px', textTransform: 'uppercase' }}
+                                        >
+                                            {cat}
+                                        </button>
                                     ))}
-                                </select>
+                                </div>
                             </div>
                         </div>
 
-                        {/* Notes List */}
                         <div className="d-flex flex-column gap-3">
                             {notes.length === 0 ? (
                                 <div className="text-center py-5 opacity-25">
@@ -165,9 +157,9 @@ const Notes: React.FC = () => {
                                 </div>
                             ) : (
                                 notes.map((note) => (
-                                    <div key={note.id} className="glass rounded-4 p-4 shadow-sm animate-fade-in-up border-start border-primary border-4 position-relative group">
-                                        <div className="d-flex justify-content-between align-items-start mb-2">
-                                            <div className="d-flex gap-2 align-items-center">
+                                    <div key={note.id} className="glass rounded-4 p-3 p-md-4 shadow-sm border-start border-primary border-4 position-relative">
+                                        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-2 gap-2">
+                                            <div className="d-flex gap-2 align-items-center flex-wrap">
                                                 <span className="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 text-uppercase tracking-wider x-small px-3">
                                                     {note.category}
                                                 </span>
@@ -176,18 +168,17 @@ const Notes: React.FC = () => {
                                                     <span>{note.author}</span>
                                                 </span>
                                             </div>
-                                            <div className="d-flex align-items-center gap-3">
-                                                <span className="text-body opacity-25 small">{note.date}</span>
+                                            <div className="d-flex align-items-center gap-3 ms-auto ms-sm-0">
+                                                <span className="text-body opacity-25 x-small">{note.date}</span>
                                                 <button
-                                                    className="btn btn-link btn-sm text-danger p-0 opacity-50 hover-opacity-100 transition-all delete-btn"
+                                                    className="btn btn-link btn-sm text-danger p-0 opacity-50 hover-opacity-100"
                                                     onClick={() => handleDeleteNote(note.id, note.author)}
-                                                    title="Remove from session"
                                                 >
                                                     <i className="bi bi-trash"></i>
                                                 </button>
                                             </div>
                                         </div>
-                                        <p className="text-body m-0 fs-5 fw-light">{note.content}</p>
+                                        <p className="text-body m-0 fs-6 fw-light">{note.content}</p>
                                     </div>
                                 ))
                             )}

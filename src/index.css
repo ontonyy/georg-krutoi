@@ -322,3 +322,44 @@ h6 {
   mix-blend-mode: multiply;
   filter: contrast(1.2) brightness(0.8);
 }
+
+/* Mobile Utilities */
+@media (max-width: 768px) {
+  .section-padding {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  .display-4 {
+    font-size: 2.2rem;
+  }
+
+  .x-small {
+    font-size: 0.65rem;
+  }
+
+  .xsmall-text {
+    font-size: 10px;
+  }
+
+  .timeline {
+    padding-left: 2rem !important;
+  }
+
+  .timeline-item::before {
+    left: -2.5rem !important;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(var(--text-color), 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(var(--text-color), 0.2);
+  border-radius: 10px;
+}
