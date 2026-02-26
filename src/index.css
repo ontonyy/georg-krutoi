@@ -334,6 +334,10 @@ h6 {
     font-size: 2.2rem;
   }
 
+  .brand-text {
+    letter-spacing: 0.15em !important;
+  }
+
   .x-small {
     font-size: 0.65rem;
   }
